@@ -4,7 +4,7 @@ import path from 'path'
 import { viteMockServe } from 'vite-plugin-mock'
 
 export default defineConfig({
-  base: process.env.NODE_ENV === 'production' ? '/admin-system/' : '/',
+  base: process.env.NODE_ENV === 'production' ? '/vue-admin-system/' : '/',
   plugins: [
     vue(),
     viteMockServe({
