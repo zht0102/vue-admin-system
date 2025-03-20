@@ -11,11 +11,19 @@ export default defineConfig({
       output: {
         chunkFileNames: 'assets/js/[name]-[hash].js',
         entryFileNames: 'assets/js/[name]-[hash].js',
-        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]'
+        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]',
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return 'vendor'
+          }
+        }
       }
-    }
+    },
+    cssCodeSplit: true,
+    sourcemap: false,
+    minify: 'terser'
   },
-  base: process.env.NODE_ENV === 'production' ? '/vue-admin-system/' : '/',
+  base: '/vue-admin-system/',
   plugins: [
     vue(),
     viteMockServe({

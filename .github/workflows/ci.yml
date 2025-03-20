@@ -9,11 +9,14 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-      # 添加清除缓存步骤
       - name: Clear Cache
         run: |
           rm -rf ./dist
@@ -33,9 +36,19 @@ jobs:
         run: pnpm install
 
       - name: Build
-        run: pnpm build
+        run: |
+          pnpm build
+          cp dist/index.html dist/404.html
         env:
           NODE_ENV: production
+          VITE_BASE_URL: /vue-admin-system/
+
+      - name: Check Build Output
+        run: |
+          echo "构建输出文件列表："
+          ls -la dist/
+          echo "index.html 内容："
+          cat dist/index.html
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
@@ -44,3 +57,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           force_orphan: true
+          keep_files: false
+          enable_jekyll: false
+          commit_message: 'deploy: update gh-pages'
