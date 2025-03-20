@@ -13,6 +13,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      # 添加清除缓存步骤
+      - name: Clear Cache
+        run: |
+          rm -rf ./dist
+          rm -rf ./.github/pages
+          
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -37,3 +43,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+          force_orphan: true
